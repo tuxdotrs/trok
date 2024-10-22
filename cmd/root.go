@@ -6,6 +6,7 @@ package cmd
 import (
 	"os"
 
+	"github.com/0xtux/trok/internal/config"
 	"github.com/spf13/cobra"
 )
 
@@ -13,6 +14,10 @@ var rootCmd = &cobra.Command{
 	Use:    "trok",
 	Hidden: true,
 	Long:   "Simple TCP tunnel in Go that exposes local ports to internet, bypassing NAT firewalls.",
+}
+
+func init() {
+	config.InitLogger()
 }
 
 func Execute() {
