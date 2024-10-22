@@ -1,6 +1,7 @@
 /*
 Copyright © 2024 tux <0xtux@pm.me>
 */
+
 package cmd
 
 import (
