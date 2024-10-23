@@ -5,6 +5,8 @@ Copyright © 2024 tux <0xtux@pm.me>
 package client
 
 import (
+	"fmt"
+	"io"
 	"net"
 
 	"github.com/0xtux/trok/internal/lib"
@@ -49,10 +51,10 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 		switch m.CMD {
 
 		case "EHLO":
-			t.hanldeCMDEHLO(p, m)
+			t.hanldeCMDEHLO(m)
 
 		case "CNCT":
-			t.handleCMDCNCT(p, m)
+			t.handleCMDCNCT(m)
 
 		default:
 			log.Info().Msgf("invalid command")
@@ -60,12 +62,29 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 	}
 }
 
-func (t *Trok) hanldeCMDEHLO(p *lib.ProtocolHandler, m *lib.Message) {
+func (t *Trok) hanldeCMDEHLO(m *lib.Message) {
 	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
-	p.WriteMessage(m)
 }
 
-func (t *Trok) handleCMDCNCT(p *lib.ProtocolHandler, m *lib.Message) {
+func (t *Trok) handleCMDCNCT(m *lib.Message) {
 	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
-	p.WriteMessage(m)
+
+	var upstream TCPClient
+	var downstream TCPClient
+
+	err := upstream.Init(3000, "UpStream")
+	if err != nil {
+		log.Error().Msgf("can't connect to upstream socket: %v", err)
+		return
+	}
+
+	err = downstream.Init(1421, "DownStream")
+	if err != nil {
+		log.Error().Msgf("can't connect to downstream socket: %v", err)
+		return
+	}
+
+	downstream.conn.Write([]byte(fmt.Sprintf("ACPT %s\n", m.ARG)))
+	go io.Copy(upstream.conn, downstream.conn)
+	io.Copy(downstream.conn, upstream.conn)
 }
