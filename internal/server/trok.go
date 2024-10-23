@@ -5,9 +5,9 @@ Copyright © 2024 tux <0xtux@pm.me>
 package server
 
 import (
-	"bufio"
 	"net"
 
+	"github.com/0xtux/trok/internal/lib"
 	"github.com/rs/zerolog/log"
 )
 
@@ -31,10 +31,10 @@ func (t *Trok) Stop() {
 }
 
 func (t *Trok) ControlConnHandler(conn net.Conn) {
-	reader := bufio.NewReader(conn)
+	p := lib.InitProtocolHandler(conn)
 
 	for {
-		data, err := reader.ReadString('\n')
+		m, err := p.ReadMessage()
 		if err != nil {
 			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
 				log.Warn().Msgf("connection timed out: %s", conn.RemoteAddr())
@@ -44,6 +44,26 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 			return
 		}
 
-		log.Info().Msgf(data)
+		switch m.CMD {
+
+		case "HELO":
+			t.handleCMDHELO(p, m)
+
+		case "ACPT":
+			t.handleCMDACPT(p, m)
+
+		default:
+			log.Info().Msgf("invalid command")
+		}
 	}
+}
+
+func (t *Trok) handleCMDHELO(p *lib.ProtocolHandler, m *lib.Message) {
+	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
+	p.WriteMessage(m)
+}
+
+func (t *Trok) handleCMDACPT(p *lib.ProtocolHandler, m *lib.Message) {
+	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
+	p.WriteMessage(m)
 }
