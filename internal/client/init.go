@@ -11,9 +11,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func Start(port uint16) {
-	var trok Trok
-	if err := trok.Init(port); err != nil {
+func Start(serverAddr, localAddr string) {
+	trok, err := NewTrokClient(serverAddr, localAddr)
+	if err != nil {
 		log.Fatal().Msgf("failed init trok %v", err)
 	}
 

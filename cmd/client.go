@@ -15,17 +15,23 @@ var clientCmd = &cobra.Command{
 	Short: "Initiates a local proxy to the remote server",
 	Long:  "Initiates a local proxy to the remote server",
 	Run: func(cmd *cobra.Command, args []string) {
-		port, err := cmd.Flags().GetUint16("port")
+		serverAddr, err := cmd.Flags().GetString("serverAddr")
 		if err != nil {
 			panic(err)
 		}
-		client.Start(port)
+
+		localAddr, err := cmd.Flags().GetString("localAddr")
+		if err != nil {
+			panic(err)
+		}
+
+		client.Start(serverAddr, localAddr)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(clientCmd)
 
-	clientCmd.Flags().Uint16P("port", "p", 0, "Local port to expose")
-	clientCmd.MarkFlagRequired("port")
+	clientCmd.Flags().StringP("serverAddr", "s", "trok.tux.rs:1337", "Remote server address")
+	clientCmd.Flags().StringP("localAddr", "a", "0.0.0.0:80", "Local addr to expose")
 }

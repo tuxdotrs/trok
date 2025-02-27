@@ -14,22 +14,29 @@ import (
 )
 
 type Trok struct {
-	controlClient TCPClient
+	controlClient *TCPClient
+	serverAddr    string
+	localAddr     string
 }
 
-func (t *Trok) Init(port uint16) error {
-	err := t.controlClient.Init(port, "Controller")
-	return err
+func NewTrokClient(serverAddr, localAddr string) (*Trok, error) {
+	controlClient, err := NewTCPClient(serverAddr, "Controller")
+
+	return &Trok{
+		controlClient: controlClient,
+		serverAddr:    serverAddr,
+		localAddr:     localAddr,
+	}, err
 }
 
 func (t *Trok) Start() {
 	go t.controlClient.Start(t.ControlConnHandler)
-	log.Info().Msgf("started Trok client on port %d", t.controlClient.Port())
+	log.Info().Msgf("started Trok client on %s", t.controlClient.Addr())
 }
 
 func (t *Trok) Stop() {
 	t.controlClient.Stop()
-	log.Info().Msgf("stopped Trok client on port %d", t.controlClient.Port())
+	log.Info().Msgf("stopped Trok client on %s", t.controlClient.Addr())
 }
 
 func (t *Trok) ControlConnHandler(conn net.Conn) {
@@ -69,22 +76,19 @@ func (t *Trok) hanldeCMDEHLO(m *lib.Message) {
 func (t *Trok) handleCMDCNCT(m *lib.Message) {
 	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
 
-	var upstream TCPClient
-	var downstream TCPClient
-
-	err := upstream.Init(3000, "UpStream")
+	upStream, err := NewTCPClient(t.localAddr, "UpStream")
 	if err != nil {
 		log.Error().Msgf("can't connect to upstream socket: %v", err)
 		return
 	}
 
-	err = downstream.Init(1421, "DownStream")
+	downStream, err := NewTCPClient(t.serverAddr, "DownStream")
 	if err != nil {
 		log.Error().Msgf("can't connect to downstream socket: %v", err)
 		return
 	}
 
-	downstream.conn.Write([]byte(fmt.Sprintf("ACPT %s\n", m.ARG)))
-	go io.Copy(upstream.conn, downstream.conn)
-	io.Copy(downstream.conn, upstream.conn)
+	downStream.conn.Write([]byte(fmt.Sprintf("ACPT %s\n", m.ARG)))
+	go io.Copy(upStream.conn, downStream.conn)
+	io.Copy(downStream.conn, upStream.conn)
 }

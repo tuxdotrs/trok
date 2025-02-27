@@ -5,7 +5,6 @@ Copyright © 2024 tux <0xtux@pm.me>
 package client
 
 import (
-	"fmt"
 	"net"
 )
 
@@ -14,16 +13,13 @@ type TCPClient struct {
 	conn  net.Conn
 }
 
-func (c *TCPClient) Init(port uint16, title string) error {
-	address := fmt.Sprintf(":%d", port)
-	conn, err := net.Dial("tcp", address)
-	if err != nil {
-		return err
-	}
+func NewTCPClient(addr, title string) (*TCPClient, error) {
+	conn, err := net.Dial("tcp", addr)
 
-	c.title = title
-	c.conn = conn
-	return nil
+	return &TCPClient{
+		title: title,
+		conn:  conn,
+	}, err
 }
 
 func (c *TCPClient) Start(handler func(conn net.Conn)) {
@@ -32,6 +28,14 @@ func (c *TCPClient) Start(handler func(conn net.Conn)) {
 
 func (c *TCPClient) Stop() error {
 	return c.conn.Close()
+}
+
+func (s *TCPClient) Addr() string {
+	return s.conn.RemoteAddr().String()
+}
+
+func (c *TCPClient) Host() string {
+	return c.conn.RemoteAddr().(*net.TCPAddr).IP.String()
 }
 
 func (c *TCPClient) Port() uint16 {
