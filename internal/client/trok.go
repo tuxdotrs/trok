@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"strings"
 
 	"github.com/0xtux/trok/internal/lib"
 	"github.com/rs/zerolog/log"
@@ -31,12 +32,14 @@ func NewTrokClient(serverAddr, localAddr string) (*Trok, error) {
 
 func (t *Trok) Start() {
 	go t.controlClient.Start(t.ControlConnHandler)
-	log.Info().Msgf("started Trok client on %s", t.controlClient.Addr())
+	parts := strings.Split(t.serverAddr, ":")
+	log.Info().Msgf("started Trok client on %s", parts[0])
 }
 
 func (t *Trok) Stop() {
 	t.controlClient.Stop()
-	log.Info().Msgf("stopped Trok client on %s", t.controlClient.Addr())
+	parts := strings.Split(t.serverAddr, ":")
+	log.Info().Msgf("stopped Trok client on %s", parts[0])
 }
 
 func (t *Trok) ControlConnHandler(conn net.Conn) {
@@ -70,7 +73,8 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 }
 
 func (t *Trok) hanldeCMDEHLO(m *lib.Message) {
-	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
+	parts := strings.Split(t.serverAddr, ":")
+	log.Info().Msgf("[CMD] %s [ARG] %s:%s", m.CMD, parts[0], m.ARG)
 }
 
 func (t *Trok) handleCMDCNCT(m *lib.Message) {
