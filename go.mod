@@ -1,4 +1,4 @@
-module github.com/0xtux/trok
+module github.com/tuxdotrs/trok
 
 go 1.22.7
 

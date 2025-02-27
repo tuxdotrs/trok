@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/0xtux/trok/internal/lib"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"github.com/rs/zerolog/log"
+	"github.com/tuxdotrs/trok/internal/lib"
 )
 
 type Conn struct {

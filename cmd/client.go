@@ -5,8 +5,8 @@ Copyright © 2024 tux <0xtux@pm.me>
 package cmd
 
 import (
-	"github.com/0xtux/trok/internal/client"
 	"github.com/spf13/cobra"
+	"github.com/tuxdotrs/trok/internal/client"
 )
 
 // clientCmd represents the local command

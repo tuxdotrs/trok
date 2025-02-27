@@ -10,8 +10,8 @@ import (
 	"net"
 	"strings"
 
-	"github.com/0xtux/trok/internal/lib"
 	"github.com/rs/zerolog/log"
+	"github.com/tuxdotrs/trok/internal/lib"
 )
 
 type Trok struct {

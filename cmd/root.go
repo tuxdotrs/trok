@@ -7,8 +7,8 @@ package cmd
 import (
 	"os"
 
-	"github.com/0xtux/trok/internal/config"
 	"github.com/spf13/cobra"
+	"github.com/tuxdotrs/trok/internal/config"
 )
 
 var rootCmd = &cobra.Command{
