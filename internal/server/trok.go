@@ -27,20 +27,20 @@ type Trok struct {
 	mutex         sync.Mutex
 }
 
-func (t *Trok) Init(port uint16) error {
+func (t *Trok) Init(addr string) error {
 	t.publicConns = make(map[string]Conn)
-	err := t.controlServer.Init(port, "Controller")
+	err := t.controlServer.Init(addr, "Controller")
 	return err
 }
 
 func (t *Trok) Start() {
 	go t.controlServer.Start(t.ControlConnHandler)
-	log.Info().Msgf("started Trok server on port %d", t.controlServer.Port())
+	log.Info().Msgf("started Trok server on %s", t.controlServer.Addr())
 }
 
 func (t *Trok) Stop() {
 	t.controlServer.Stop()
-	log.Info().Msgf("stopped Trok server on port %d", t.controlServer.Port())
+	log.Info().Msgf("stopped Trok server on %s", t.controlServer.Addr())
 }
 
 func (t *Trok) ControlConnHandler(conn net.Conn) {
@@ -75,7 +75,7 @@ func (t *Trok) handleCMDHELO(p *lib.ProtocolHandler, m *lib.Message) {
 	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
 
 	var s TCPServer
-	err := s.Init(0, "Handler")
+	err := s.Init(":", "Handler")
 	if err != nil {
 		log.Error().Msgf("error handling HELO cmd: %v", err)
 		return

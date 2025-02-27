@@ -15,16 +15,17 @@ var serverCmd = &cobra.Command{
 	Short: "Initiates the remote proxy server",
 	Long:  "Initiates the remote proxy server",
 	Run: func(cmd *cobra.Command, args []string) {
-		port, err := cmd.Flags().GetUint16("port")
+		addr, err := cmd.Flags().GetString("addr")
 		if err != nil {
 			panic(err)
 		}
-		server.Start(port)
+		server.Start(addr)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serverCmd)
 
-	serverCmd.Flags().Uint16P("port", "p", 1421, "Port for the server to listen on")
+	serverCmd.Flags().StringP("addr", "a", "0.0.0.0:1337", "Addr for the server to listen on")
+	clientCmd.MarkFlagRequired("addr")
 }

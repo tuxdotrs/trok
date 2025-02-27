@@ -5,7 +5,6 @@ Copyright © 2024 tux <0xtux@pm.me>
 package server
 
 import (
-	"fmt"
 	"net"
 )
 
@@ -14,13 +13,8 @@ type TCPServer struct {
 	listener net.Listener
 }
 
-func (s *TCPServer) Init(port uint16, title string) error {
-	address := ":"
-	if port > 0 {
-		address = fmt.Sprintf(":%d", port)
-	}
-
-	ln, err := net.Listen("tcp", address)
+func (s *TCPServer) Init(addr, title string) error {
+	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
 	}
@@ -42,6 +36,14 @@ func (s *TCPServer) Start(handler func(conn net.Conn)) error {
 
 func (s *TCPServer) Stop() error {
 	return s.listener.Close()
+}
+
+func (s *TCPServer) Addr() string {
+	return s.listener.Addr().String()
+}
+
+func (c *TCPServer) Host() string {
+	return c.listener.Addr().(*net.TCPAddr).IP.String()
 }
 
 func (s *TCPServer) Port() uint16 {
