@@ -1,0 +1,62 @@
+name: build trok
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      prerelease:
+        description: 'Mark as pre-release'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Run tests
+        run: go test -v ./...
+
+      - name: Build binaries
+        env:
+          CGO_ENABLED: 0
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o dist/trok-linux-amd64
+          GOOS=linux GOARCH=arm64 go build -o dist/trok-linux-arm64
+          GOOS=darwin GOARCH=amd64 go build -o dist/trok-darwin-amd64
+          GOOS=darwin GOARCH=arm64 go build -o dist/trok-darwin-arm64
+          GOOS=windows GOARCH=amd64 go build -o dist/trok-windows-amd64.exe
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/trok-linux-amd64
+            dist/trok-linux-arm64
+            dist/trok-darwin-amd64
+            dist/trok-darwin-arm64
+            dist/trok-windows-amd64.exe
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
