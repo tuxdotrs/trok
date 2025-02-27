@@ -8,21 +8,27 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"sync"
+	"time"
 
 	"github.com/0xtux/trok/internal/lib"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"github.com/rs/zerolog/log"
 )
 
+type Conn struct {
+	conn      net.Conn
+	timestamp time.Time
+}
+
 type Trok struct {
 	controlServer TCPServer
-	publicConns   map[string]net.Conn
-	tunnels       map[uint16]*lib.ProtocolHandler
+	publicConns   map[string]Conn
+	mutex         sync.Mutex
 }
 
 func (t *Trok) Init(port uint16) error {
-	t.publicConns = make(map[string]net.Conn)
-	t.tunnels = make(map[uint16]*lib.ProtocolHandler)
+	t.publicConns = make(map[string]Conn)
 	err := t.controlServer.Init(port, "Controller")
 	return err
 }
@@ -67,8 +73,8 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 
 func (t *Trok) handleCMDHELO(p *lib.ProtocolHandler, m *lib.Message) {
 	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
-	var s TCPServer
 
+	var s TCPServer
 	err := s.Init(0, "Handler")
 	if err != nil {
 		log.Error().Msgf("error handling HELO cmd: %v", err)
@@ -76,38 +82,61 @@ func (t *Trok) handleCMDHELO(p *lib.ProtocolHandler, m *lib.Message) {
 	}
 
 	port := s.Port()
-	go s.Start(t.PublicConnHandler)
-	t.tunnels[port] = p
-
 	p.WriteMessage(&lib.Message{CMD: "EHLO", ARG: fmt.Sprintf("%d", port)})
+
+	uidChan := make(chan string)
+	defer close(uidChan)
+
+	go t.PublicConnHandler(s.listener, uidChan)
+
+	for id := range uidChan {
+		err := p.WriteMessage(&lib.Message{CMD: "CNCT", ARG: id})
+		if err != nil {
+			break
+		}
+	}
 }
 
 func (t *Trok) handleCMDACPT(conn net.Conn, m *lib.Message) {
 	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
 
-	pConn, ok := t.publicConns[m.ARG]
-	if !ok {
-		log.Error().Msgf("error finding public connection")
+	t.mutex.Lock()
+	pc, exists := t.publicConns[m.ARG]
+	delete(t.publicConns, m.ARG)
+	t.mutex.Unlock()
+
+	if !exists || time.Since(pc.timestamp) > 10*time.Second {
+		conn.Close()
+		if exists {
+			pc.conn.Close()
+		}
+		return
 	}
 
-	go io.Copy(pConn, conn)
-	io.Copy(conn, pConn)
+	go io.Copy(pc.conn, conn)
+	io.Copy(conn, pc.conn)
 }
 
-func (t *Trok) PublicConnHandler(conn net.Conn) {
-	id, err := gonanoid.New(12)
-	if err != nil {
-		log.Error().Msgf("error generating uid: %v", err)
-		return
-	}
+func (t *Trok) PublicConnHandler(ln net.Listener, uidChan chan<- string) {
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			return
+		}
 
-	port := uint16(conn.LocalAddr().(*net.TCPAddr).Port)
-	tnl, ok := t.tunnels[port]
-	if !ok {
-		log.Error().Msgf("error finding tunnel connection")
-		return
-	}
-	tnl.WriteMessage(&lib.Message{CMD: "CNCT", ARG: id})
+		id, err := gonanoid.New(12)
+		if err != nil {
+			log.Error().Msgf("error generating uid for public conn: %v", err)
+			return
+		}
 
-	t.publicConns[id] = conn
+		t.mutex.Lock()
+		t.publicConns[id] = Conn{
+			conn:      conn,
+			timestamp: time.Now(),
+		}
+		t.mutex.Unlock()
+
+		uidChan <- id
+	}
 }

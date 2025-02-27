@@ -51,10 +51,10 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 		switch m.CMD {
 
 		case "EHLO":
-			t.hanldeCMDEHLO(m)
+			go t.hanldeCMDEHLO(m)
 
 		case "CNCT":
-			t.handleCMDCNCT(m)
+			go t.handleCMDCNCT(m)
 
 		default:
 			log.Info().Msgf("invalid command")
