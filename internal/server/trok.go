@@ -53,6 +53,7 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 				log.Warn().Msgf("connection timed out: %s", conn.RemoteAddr())
 			} else {
 				log.Logger.Info().Msgf("connection closed: %s", err)
+				log.Logger.Info().Msgf("connection closed: %s", conn.RemoteAddr())
 			}
 			return
 		}
