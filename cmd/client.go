@@ -32,6 +32,6 @@ var clientCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(clientCmd)
 
-	clientCmd.Flags().StringP("serverAddr", "s", "trok.tux.rs:1337", "Remote server address")
+	clientCmd.Flags().StringP("serverAddr", "s", "trok.cloud:1337", "Remote server address")
 	clientCmd.Flags().StringP("localAddr", "a", "0.0.0.0:80", "Local addr to expose")
 }
