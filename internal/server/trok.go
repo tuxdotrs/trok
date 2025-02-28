@@ -52,7 +52,6 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
 				log.Warn().Msgf("connection timed out: %s", conn.RemoteAddr())
 			} else {
-				log.Logger.Info().Msgf("connection closed: %s", err)
 				log.Logger.Info().Msgf("connection closed: %s", conn.RemoteAddr())
 			}
 			return
@@ -114,8 +113,7 @@ func (t *Trok) handleCMDACPT(conn net.Conn, m *lib.Message) {
 		return
 	}
 
-	go io.Copy(pc.conn, conn)
-	io.Copy(conn, pc.conn)
+	t.Bind(pc.conn, conn)
 }
 
 func (t *Trok) PublicConnHandler(ln net.Listener, uidChan chan<- string) {
@@ -140,4 +138,11 @@ func (t *Trok) PublicConnHandler(ln net.Listener, uidChan chan<- string) {
 
 		uidChan <- id
 	}
+}
+
+func (t *Trok) Bind(src, dst net.Conn) {
+	defer src.Close()
+	defer dst.Close()
+	go io.Copy(src, dst)
+	io.Copy(dst, src)
 }
