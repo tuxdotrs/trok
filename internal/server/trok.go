@@ -22,6 +22,7 @@ type Conn struct {
 }
 
 type Trok struct {
+	webServer     *TrokWeb
 	controlServer TCPServer
 	publicConns   map[string]Conn
 	mutex         sync.Mutex
@@ -29,17 +30,20 @@ type Trok struct {
 
 func (t *Trok) Init(addr string) error {
 	t.publicConns = make(map[string]Conn)
+	t.webServer = NewTrokWeb(":3000")
 	err := t.controlServer.Init(addr, "Controller")
 	return err
 }
 
 func (t *Trok) Start() {
 	go t.controlServer.Start(t.ControlConnHandler)
+	go t.webServer.Start()
 	log.Info().Msgf("started Trok server on %s", t.controlServer.Addr())
 }
 
 func (t *Trok) Stop() {
 	t.controlServer.Stop()
+	t.webServer.Stop()
 	log.Info().Msgf("stopped Trok server on %s", t.controlServer.Addr())
 }
 

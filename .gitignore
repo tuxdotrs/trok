@@ -26,3 +26,7 @@ snippets/
 
 # nix build
 result
+
+# web
+node_modules
+dist

@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* koulen-khmer-400-normal */
+@font-face {
+  font-family: "Koulen";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("./assets/fonts/Koulen-Regular.ttf");
+}
+
+::selection {
+  background: var(--color-cyan-200);
+}
+
+@theme {
+  --font-koulen: "Koulen", "sans-serif";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
