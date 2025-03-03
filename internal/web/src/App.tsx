@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div class="flex h-screen w-screen justify-center items-center antialiased">
-      <div class="pt-10 mx-auto lg:max-w-5xl">
+      <div class="mx-auto lg:max-w-5xl">
         <div class="flex flex-col justify-center items-center">
           <h1 class="text-7xl text-zinc-700 font-koulen">TROK</h1>
           <h3 class="text-lg text-zinc-500 font-koulen">
