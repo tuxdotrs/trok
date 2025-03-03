@@ -59,7 +59,7 @@ function App() {
                 class="text-xs md:text rounded bg-zinc-100 p-2 mt-2 flex cursor-pointer"
                 onclick={handleCopy}
               >
-                <div class="grow mr-10 text-zinc-600 font-mono">
+                <div class="grow mr-10 text-zinc-600 text-left font-mono">
                   $ {install}
                 </div>
                 {copied() ? (
