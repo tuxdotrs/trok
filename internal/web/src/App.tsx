@@ -18,9 +18,9 @@ function App() {
   };
 
   return (
-    <div class="flex h-screen w-screen justify-center items-center antialiased">
+    <div class="md:flex md:h-screen md:w-screen py-8 justify-center items-center antialiased">
       <div class="mx-auto lg:max-w-5xl">
-        <div class="flex flex-col justify-center items-center">
+        <div class="mx-5 md:mx-0 flex flex-col justify-center items-center">
           <h1 class="text-7xl text-zinc-700 font-koulen">TROK</h1>
           <h3 class="text-lg text-zinc-500 font-koulen">
             EXPOSE. SHARE. ACCESS.
