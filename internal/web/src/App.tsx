@@ -112,7 +112,7 @@ function App() {
                   [CMD] EHLO [ARG] trok.cloud
                 </p>
               </div>
-              <h3 class="font-koulen text-zinc-700 text-3xl">1. Setup</h3>
+              <h3 class="font-koulen text-zinc-700 text-3xl">1. Expose</h3>
               <p class="mt-1 text-sm/6 text-gray-500">
                 provide the local port you want to share, and it&apos;ll
                 generate a URL.
@@ -148,7 +148,7 @@ function App() {
                   🎉 your awesome project 🎉
                 </div>
               </div>
-              <h3 class="font-koulen text-zinc-700 text-3xl">3. Browse</h3>
+              <h3 class="font-koulen text-zinc-700 text-3xl">3. Access</h3>
               <p class="mt-1 text-sm/6 text-gray-500">
                 access your local service from anywhere.
               </p>
