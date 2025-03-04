@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0",
     "solid-js": "^1.9.5"
   },
   "devDependencies": {

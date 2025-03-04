@@ -4,7 +4,6 @@
     "": {
       "name": "my-vue-app",
       "dependencies": {
-        "@heroicons/react": "^2.2.0",
         "solid-js": "^1.9.5",
       },
       "devDependencies": {
@@ -103,8 +102,6 @@
     "@esbuild/win32-ia32": ["@esbuild/win32-ia32@0.25.0", "", { "os": "win32", "cpu": "ia32" }, "sha512-eSNxISBu8XweVEWG31/JzjkIGbGIJN/TrRoiSVZwZ6pkC6VX4Im/WV2cz559/TXLcYbcrDN8JtKgd9DJVIo8GA=="],
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.25.0", "", { "os": "win32", "cpu": "x64" }, "sha512-ZENoHJBxA20C2zFzh6AI4fT6RraMzjYw4xKWemRTRmRVtN9c5DcH9r/f2ihEkMjOW5eGgrwCslG/+Y/3bL+DHQ=="],
-
-    "@heroicons/react": ["@heroicons/react@2.2.0", "", { "peerDependencies": { "react": ">= 16 || ^19.0.0-rc" } }, "sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ=="],
 
     "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.8", "", { "dependencies": { "@jridgewell/set-array": "^1.2.1", "@jridgewell/sourcemap-codec": "^1.4.10", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA=="],
 
@@ -277,8 +274,6 @@
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
     "postcss": ["postcss@8.5.3", "", { "dependencies": { "nanoid": "^3.3.8", "picocolors": "^1.1.1", "source-map-js": "^1.2.1" } }, "sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A=="],
-
-    "react": ["react@19.0.0", "", {}, "sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ=="],
 
     "rollup": ["rollup@4.34.9", "", { "dependencies": { "@types/estree": "1.0.6" }, "optionalDependencies": { "@rollup/rollup-android-arm-eabi": "4.34.9", "@rollup/rollup-android-arm64": "4.34.9", "@rollup/rollup-darwin-arm64": "4.34.9", "@rollup/rollup-darwin-x64": "4.34.9", "@rollup/rollup-freebsd-arm64": "4.34.9", "@rollup/rollup-freebsd-x64": "4.34.9", "@rollup/rollup-linux-arm-gnueabihf": "4.34.9", "@rollup/rollup-linux-arm-musleabihf": "4.34.9", "@rollup/rollup-linux-arm64-gnu": "4.34.9", "@rollup/rollup-linux-arm64-musl": "4.34.9", "@rollup/rollup-linux-loongarch64-gnu": "4.34.9", "@rollup/rollup-linux-powerpc64le-gnu": "4.34.9", "@rollup/rollup-linux-riscv64-gnu": "4.34.9", "@rollup/rollup-linux-s390x-gnu": "4.34.9", "@rollup/rollup-linux-x64-gnu": "4.34.9", "@rollup/rollup-linux-x64-musl": "4.34.9", "@rollup/rollup-win32-arm64-msvc": "4.34.9", "@rollup/rollup-win32-ia32-msvc": "4.34.9", "@rollup/rollup-win32-x64-msvc": "4.34.9", "fsevents": "~2.3.2" }, "bin": { "rollup": "dist/bin/rollup" } }, "sha512-nF5XYqWWp9hx/LrpC8sZvvvmq0TeTjQgaZHYmAgwysT9nh8sWnZhBnM8ZyVbbJFIQBLwHDNoMqsBZBbUo4U8sQ=="],
 
