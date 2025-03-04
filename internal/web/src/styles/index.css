@@ -6,7 +6,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url("./assets/fonts/Koulen-Regular.ttf");
+  src: url("../assets/fonts/Koulen-Regular.ttf");
 }
 
 ::selection {

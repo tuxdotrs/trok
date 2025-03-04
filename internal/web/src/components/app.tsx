@@ -3,7 +3,7 @@ import {
   ChatBubbleLeftIcon,
   ClipboardDocumentIcon,
   ClipboardDocumentCheckIcon,
-} from "./icons";
+} from "@/components/icons";
 
 function App() {
   const install = `curl -fsSL https://trok.cloud/install.sh | sh`;
