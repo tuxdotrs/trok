@@ -27,5 +27,4 @@ func init() {
 	rootCmd.AddCommand(serverCmd)
 
 	serverCmd.Flags().StringP("addr", "a", "0.0.0.0:1337", "Addr for the server to listen on")
-	clientCmd.MarkFlagRequired("addr")
 }
