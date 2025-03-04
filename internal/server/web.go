@@ -38,7 +38,7 @@ func (t *TrokWeb) Start() {
 
 	cfg := t.GetTLSCert()
 
-	ln, err := tls.Listen("tcp", ":443", cfg)
+	ln, err := tls.Listen("tcp", t.addr, cfg)
 	if err != nil {
 		log.Panic().Msgf("unable to start trok webserver: %v", err)
 	}
