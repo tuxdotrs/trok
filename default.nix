@@ -7,7 +7,7 @@ buildGoModule {
   version = "0.1.0";
 
   src = ./.;
-  vendorHash = "sha256-P7UBLLMMOwCeiM7aAY6A8cyXqxwn7mDTNS2kJTALHPU=";
+  vendorHash = "sha256-KwcLxkW3pbzujjc6JOZRwATlAA/qndf4FWpkJANv2z8=";
 
   meta = {
     license = lib.licenses.mit;
