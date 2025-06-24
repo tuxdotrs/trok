@@ -52,13 +52,18 @@ environment.systemPackages = [ inputs.trok.packages.${system}.default ];
 ```
 
 ## Usage
-
+Start a TCP tunnel:
 ```sh
 trok tcp PORT_NUMBER
 ```
+Example:
+```sh
+trok tcp 3000
+```
+This will expose your local service running on port `3000` to a public endpoint via the `trok` server.
 
 ## Selfhost
-
+You can host your own `trok` server with NixOS:
 ```nix
 # Add to your flake inputs
 trok = {
@@ -82,3 +87,4 @@ trok = {
   };
 }
 ```
+Once deployed, your `trok` server will be ready to handle tunneling requests from clients.
