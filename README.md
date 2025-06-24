@@ -65,6 +65,12 @@ Example:
 trok tcp 3000
 ```
 
+Selfhosted Server:
+
+```sh
+trok tcp 3000 -s SERVER_URL
+```
+
 This will expose your local service running on port `3000` to a public endpoint via the `trok` server.
 
 ## Selfhost
