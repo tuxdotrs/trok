@@ -11,19 +11,34 @@
   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/tuxdotrs/trok">
 </p>
 
-### Table of Contents
+## Table of Contents
 
+- [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Selfhost](#selfhost)
 
-### Installation
+## Features
+
+- [x] TCP Tunneling
+- [ ] UDP Tunneling
+- [x] HTTP Tunneling
+- [ ] HTTPS Tunneling
+
+## Installation
 
 ```sh
 curl -fsSL https://trok.cloud/install.sh | sh
 ```
 
-#### Nix Flake
+#### Nix
+
+```nix
+# If you want to quickly test trok
+nix run github:tuxdotrs/trok
+```
+
+#### Flake
 
 ```nix
 # Add to your flake inputs
@@ -36,12 +51,12 @@ trok = {
 environment.systemPackages = [ inputs.trok.packages.${system}.default ];
 ```
 
-### Usage
+## Usage
 
 ```sh
 trok tcp PORT_NUMBER
 ```
 
-### Selfhost
+## Selfhost
 
 TODO
