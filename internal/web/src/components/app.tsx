@@ -103,7 +103,7 @@ function App() {
                   <div class="border border-zinc-400 w-3 h-3 rounded-full" />
                 </div>
                 <p class="font-mono text-zinc-700 font-bold text-sm pt-4">
-                  {">"} $ trok client -a :3000
+                  {">"} $ trok tcp 3000
                 </p>
                 <p class="font-mono text-zinc-400 text-sm">
                   started Trok client on trok.cloud
