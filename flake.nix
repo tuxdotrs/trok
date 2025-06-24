@@ -20,6 +20,8 @@
       trok = pkgs.callPackage ./default.nix {};
     });
 
+    nixosModules.default = ./module.nix;
+
     devShells = forAllSystems (pkgs: {
       default = pkgs.callPackage ./shell.nix {};
     });
