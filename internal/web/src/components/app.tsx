@@ -44,7 +44,7 @@ function App() {
                 <span class="font-mono bg-zinc-100 px-1 py-0.5 rounded">
                   ngrok
                 </span>
-                &nbsp;but simpler. Just log in, run the command, and get a
+                &nbsp;but simpler. Just install, run the command, and get a
                 shareable URL to access your local service from anywhere. No
                 complex setup—just instant, secure tunneling to the internet.
               </p>
