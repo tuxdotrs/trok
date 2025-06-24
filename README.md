@@ -59,4 +59,26 @@ trok tcp PORT_NUMBER
 
 ## Selfhost
 
-TODO
+```nix
+# Add to your flake inputs
+trok = {
+  url = "github:tuxdotrs/trok";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+
+# Add this in your nixos config
+{inputs, ...}: {
+  imports = [
+    inputs.trok.nixosModules.default
+  ];
+
+  tux.services.trok = {
+    enable = true;
+    host = "0.0.0.0";
+    port = 1337;
+    openFirewall = true;
+    user = "trok";
+    group = "trok";
+  };
+}
+```
