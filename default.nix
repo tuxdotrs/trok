@@ -4,7 +4,7 @@
 }:
 buildGoModule {
   pname = "trok";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = ./.;
   vendorHash = "sha256-KwcLxkW3pbzujjc6JOZRwATlAA/qndf4FWpkJANv2z8=";
