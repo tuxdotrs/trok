@@ -50,7 +50,7 @@ function App() {
               </p>
             </div>
 
-            <div class="px-5 py-10 border-b border-gray-200 flex-1 md:w-7/12">
+            <div class="px-5 py-10 border-b border-gray-200 flex flex-col flex-1 md:w-7/12">
               <h3 class="text-3xl text-zinc-700 font-koulen">Install</h3>
               <p class="mt-1 text-sm/6 text-gray-500">
                 Install trok to your machine using shell:
@@ -83,6 +83,24 @@ function App() {
                     ./trok
                   </span>
                   &nbsp;on any system
+                </p>
+              </div>
+              <div class="flex flex-1 items-end">
+                <p>
+                  <a
+                    class="text-sm/6 text-gray-500 hover:text-zinc-700"
+                    href="https://github.com/tuxdotrs/trok"
+                  >
+                    Github
+                  </a>
+                </p>
+                <p>
+                  <a
+                    class="text=sm/6 text-gray-500 ml-2 hover:text-zinc-700"
+                    href="https://git.tux.rs/tux/trok"
+                  >
+                    Gitea
+                  </a>
                 </p>
               </div>
             </div>
