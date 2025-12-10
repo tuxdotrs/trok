@@ -11,10 +11,10 @@ if [ "$OS" = "Windows_NT" ]; then
     exit 1
 else
     case $(uname -sm) in
-    "Darwin x86_64") target="darwin-x86_64" ;;
-    "Darwin arm64") target="darwin-aarch64" ;;
-    "Linux x86_64") target="linux-x86_64" ;;
-    "Linux arm64"|"Linux aarch64") target="linux-aarch64" ;;
+    "Darwin x86_64") target="darwin-amd64" ;;
+    "Darwin arm64") target="darwin-arm64" ;;
+    "Linux x86_64") target="linux-amd64" ;;
+    "Linux arm64"|"Linux aarch64") target="linux-arm64" ;;
     *) target="linux-x86_64" ;;
     esac
 fi
@@ -27,4 +27,6 @@ release_target_url=$(
     sed -re 's/.*: "([^"]+)".*/\1/' \
 )
 
-curl -sL "$release_target_url" | tar xz
+curl -sL "$release_target_url" -o trok
+chmod +x trok
+echo "Installation complete!"
