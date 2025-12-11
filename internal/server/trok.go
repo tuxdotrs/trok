@@ -67,7 +67,7 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 			t.handleCMDHELO(p, m)
 
 		case "ACPT":
-			t.handleCMDACPT(conn, m)
+			t.handleCMDACPT(p, conn, m)
 
 		default:
 			log.Info().Msgf("invalid command")
@@ -101,7 +101,7 @@ func (t *Trok) handleCMDHELO(p *lib.ProtocolHandler, m *lib.Message) {
 	}
 }
 
-func (t *Trok) handleCMDACPT(conn net.Conn, m *lib.Message) {
+func (t *Trok) handleCMDACPT(p *lib.ProtocolHandler, conn net.Conn, m *lib.Message) {
 	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
 
 	t.mutex.Lock()
@@ -117,7 +117,7 @@ func (t *Trok) handleCMDACPT(conn net.Conn, m *lib.Message) {
 		return
 	}
 
-	t.Bind(pc.conn, conn)
+	t.Bind(pc.conn, conn, p.Reader())
 }
 
 func (t *Trok) PublicConnHandler(ln net.Listener, uidChan chan<- string) {
@@ -144,9 +144,9 @@ func (t *Trok) PublicConnHandler(ln net.Listener, uidChan chan<- string) {
 	}
 }
 
-func (t *Trok) Bind(src, dst net.Conn) {
+func (t *Trok) Bind(src net.Conn, dst net.Conn, dstReader io.Reader) {
 	defer src.Close()
 	defer dst.Close()
-	go io.Copy(src, dst)
+	go io.Copy(src, dstReader)
 	io.Copy(dst, src)
 }

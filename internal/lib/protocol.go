@@ -29,6 +29,10 @@ func InitProtocolHandler(conn net.Conn) *ProtocolHandler {
 	}
 }
 
+func (p *ProtocolHandler) Reader() *bufio.Reader {
+	return p.reader
+}
+
 func (p *ProtocolHandler) ReadMessage() (*Message, error) {
 	data, err := p.reader.ReadString('\n')
 	if err != nil {
