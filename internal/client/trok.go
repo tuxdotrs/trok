@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"os"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -18,15 +19,17 @@ type Trok struct {
 	controlClient *TCPClient
 	serverAddr    string
 	localAddr     string
+	remotePort    string
 }
 
-func NewTrokClient(serverAddr, localAddr string) (*Trok, error) {
+func NewTrokClient(serverAddr, localAddr, remotePort string) (*Trok, error) {
 	controlClient, err := NewTCPClient(serverAddr, "Controller")
 
 	return &Trok{
 		controlClient: controlClient,
 		serverAddr:    serverAddr,
 		localAddr:     localAddr,
+		remotePort:    remotePort,
 	}, err
 }
 
@@ -45,7 +48,7 @@ func (t *Trok) Stop() {
 func (t *Trok) ControlConnHandler(conn net.Conn) {
 	p := lib.InitProtocolHandler(conn)
 
-	p.WriteMessage(&lib.Message{CMD: "HELO", ARG: "Trok"})
+	p.WriteMessage(&lib.Message{CMD: "HELO", ARG: t.remotePort})
 
 	for {
 		m, err := p.ReadMessage()
@@ -65,6 +68,9 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 
 		case "CNCT":
 			go t.handleCMDCNCT(m)
+
+		case "ERR":
+			go t.handleCMDERR(m, conn)
 
 		default:
 			log.Info().Msgf("invalid command")
@@ -95,4 +101,10 @@ func (t *Trok) handleCMDCNCT(m *lib.Message) {
 	downStream.conn.Write([]byte(fmt.Sprintf("ACPT %s\n", m.ARG)))
 	go io.Copy(upStream.conn, downStream.conn)
 	io.Copy(downStream.conn, upStream.conn)
+}
+
+func (t *Trok) handleCMDERR(m *lib.Message, conn net.Conn) {
+	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
+	conn.Close()
+	os.Exit(1)
 }

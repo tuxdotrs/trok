@@ -79,9 +79,10 @@ func (t *Trok) handleCMDHELO(p *lib.ProtocolHandler, m *lib.Message) {
 	log.Info().Msgf("[CMD] %s [ARG] %s", m.CMD, m.ARG)
 
 	var s TCPServer
-	err := s.Init(":", "Handler")
+	err := s.Init(fmt.Sprintf(":%s", m.ARG), "Handler")
 	if err != nil {
 		log.Error().Msgf("error handling HELO cmd: %v", err)
+		p.WriteMessage(&lib.Message{CMD: "ERR", ARG: "ADDRESS_UNAVAILABLE"})
 		return
 	}
 
