@@ -64,7 +64,7 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 		switch m.CMD {
 
 		case "EHLO":
-			go t.hanldeCMDEHLO(m)
+			go t.handleCMDEHLO(m)
 
 		case "CNCT":
 			go t.handleCMDCNCT(m)
@@ -78,7 +78,7 @@ func (t *Trok) ControlConnHandler(conn net.Conn) {
 	}
 }
 
-func (t *Trok) hanldeCMDEHLO(m *lib.Message) {
+func (t *Trok) handleCMDEHLO(m *lib.Message) {
 	parts := strings.Split(t.serverAddr, ":")
 	log.Info().Msgf("[CMD] %s [ARG] %s:%s", m.CMD, parts[0], m.ARG)
 }
