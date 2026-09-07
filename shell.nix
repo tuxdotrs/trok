@@ -1,13 +1,13 @@
 {
   callPackage,
   go,
-}: let
-  mainPkg = callPackage ./default.nix {};
+}:
+let
+  mainPkg = callPackage ./package.nix { };
 in
-  mainPkg.overrideAttrs (oa: {
-    nativeBuildInputs =
-      [
-        go
-      ]
-      ++ (oa.nativeBuildInputs or []);
-  })
+mainPkg.overrideAttrs (oa: {
+  nativeBuildInputs = [
+    go
+  ]
+  ++ (oa.nativeBuildInputs or [ ]);
+})
