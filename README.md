@@ -90,7 +90,7 @@ trok = {
     inputs.trok.nixosModules.default
   ];
 
-  tnix.services.trok = {
+  services.trok = {
     enable = true;
     host = "0.0.0.0";
     port = 1337;
