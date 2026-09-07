@@ -30,7 +30,7 @@ type Trok struct {
 
 func (t *Trok) Init(addr string) error {
 	t.publicConns = make(map[string]Conn)
-	t.webServer = NewTrokWeb(":443")
+	t.webServer = NewTrokWeb(":1338")
 	err := t.controlServer.Init(addr, "Controller")
 	return err
 }
