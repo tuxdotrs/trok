@@ -1,14 +1,12 @@
 package server
 
 import (
-	"crypto/tls"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/rs/zerolog/log"
 	"github.com/tuxdotrs/trok/internal/web"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 type TrokWeb struct {
@@ -36,29 +34,7 @@ func (t *TrokWeb) Start() {
 		Browse:     true,
 	}))
 
-	cfg := t.GetTLSCert()
-
-	ln, err := tls.Listen("tcp", t.addr, cfg)
-	if err != nil {
-		log.Panic().Msgf("unable to start trok webserver: %v", err)
-	}
-
-	t.app.Listener(ln)
-}
-
-func (t *TrokWeb) GetTLSCert() *tls.Config {
-	m := &autocert.Manager{
-		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("trok.cloud"),
-		Cache:      autocert.DirCache("./certs"),
-	}
-
-	return &tls.Config{
-		GetCertificate: m.GetCertificate,
-		NextProtos: []string{
-			"http/1.1", "acme-tls/1",
-		},
-	}
+	log.Panic().Err(t.app.Listen(t.addr)).Msg("unable to start trok webserver")
 }
 
 func (t *TrokWeb) Stop() {
