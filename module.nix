@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.tux.services.trok;
+  cfg = config.services.trok;
 in {
-  options.tux.services.trok = {
+  options.services.trok = {
     enable = mkEnableOption "Enable trok";
 
     host = mkOption {
