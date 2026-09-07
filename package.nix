@@ -11,7 +11,7 @@ buildGoModule {
 
   meta = {
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [tuxdotrs];
+    maintainers = with lib.maintainers; [ tuxdotrs ];
     mainProgram = "trok";
   };
 }
