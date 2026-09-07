@@ -1,11 +1,6 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-with lib; let
-  cfg = config.services.trok;
+{ config, lib, pkgs, ... }:
+with lib;
+let cfg = config.services.trok;
 in {
   options.services.trok = {
     enable = mkEnableOption "Enable trok";
@@ -38,19 +33,20 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.port];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.services = {
       trok = {
         description = "trok server";
-        after = ["network.target"];
-        wantedBy = ["multi-user.target"];
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
           Type = "simple";
           User = "trok";
           Group = "trok";
-          ExecStart = "${getExe pkgs.trok} server -a ${cfg.host}:${toString cfg.port}";
+          ExecStart =
+            "${getExe pkgs.trok} server -a ${cfg.host}:${toString cfg.port}";
           Restart = "always";
 
           LockPersonality = true;
@@ -73,7 +69,7 @@ in {
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = ["@system-service"];
+          SystemCallFilter = [ "@system-service" ];
           UMask = "0077";
         };
       };
@@ -89,8 +85,6 @@ in {
       };
     };
 
-    users.groups = mkIf (cfg.group == "trok") {
-      ${cfg.group} = {};
-    };
+    users.groups = mkIf (cfg.group == "trok") { ${cfg.group} = { }; };
   };
 }

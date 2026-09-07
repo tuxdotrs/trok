@@ -1,33 +1,43 @@
 {
-  description = "Simple tunneler in Go that exposes local ports to the internet";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+  description =
+    "Simple tunneler in Go that exposes local ports to the internet";
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-    }:
-    let
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
 
-      forAllSystems =
-        function: nixpkgs.lib.genAttrs systems (system: function nixpkgs.legacyPackages.${system});
-    in
-    {
-      packages = forAllSystems (pkgs: rec {
-        default = trok;
-        trok = pkgs.callPackage ./package.nix { };
-      });
-
-      nixosModules.default = ./module.nix;
-
-      devShells = forAllSystems (pkgs: {
-        default = pkgs.callPackage ./shell.nix { };
-      });
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
+  };
+
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ inputs.treefmt-nix.flakeModule ];
+
+      systems =
+        [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+
+      perSystem = { config, pkgs, ... }: {
+        treefmt = {
+          projectRootFile = "flake.nix";
+
+          programs = {
+            nixfmt.enable = true;
+            gofumpt.enable = true;
+          };
+        };
+
+        packages = rec {
+          default = tfolio;
+          tfolio = pkgs.callPackage ./nix/package.nix { };
+        };
+
+        devShells.default = pkgs.callPackage ./nix/shell.nix { };
+      };
+
+      flake.nixosModules.default = ./nix/module.nix;
+    };
+
 }

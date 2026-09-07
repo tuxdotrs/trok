@@ -1,12 +1,9 @@
-{
-  lib,
-  buildGoModule,
-}:
+{ lib, buildGoModule }:
 buildGoModule {
   pname = "trok";
   version = "0.2.0";
 
-  src = ./.;
+  src = ../.;
   vendorHash = "sha256-KwcLxkW3pbzujjc6JOZRwATlAA/qndf4FWpkJANv2z8=";
 
   meta = {
